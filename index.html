@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="sl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c1214">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Knjižnica</title>
+<style>
+:root{--bg:#0e1014;--sur:#181b22;--sur2:#20242d;--bd:#2a2f3a;--tx:#e8eaee;--mu:#8b919d;--ac:#f2b40b;--acx:#1a1300;--ok:#2ecc71;--wip:#ff9f1a;--bad:#e5484d;--r:14px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.hidden{display:none!important}
+button{font-family:inherit}
+header.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:rgba(14,16,20,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd)}
+header.top h1{margin:0;font-size:20px;flex:1;letter-spacing:.3px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+header.top h1 span{color:var(--ac)}
+.icon-btn{width:40px;height:40px;flex:none;border-radius:12px;border:1px solid var(--bd);background:var(--sur);color:var(--tx);font-size:18px;display:grid;place-items:center;cursor:pointer}
+.seg{display:flex;gap:8px;margin:12px 14px 0;max-width:692px}
+.seg button{flex:1;height:44px;border-radius:12px;border:1px solid var(--bd);background:var(--sur);color:var(--mu);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.seg button i{font-style:normal;width:20px;height:20px;border-radius:6px;border:2px solid var(--bd);display:grid;place-items:center;font-size:14px;line-height:1;color:transparent}
+.seg button.on{background:var(--ac);color:var(--acx);border-color:var(--ac)}
+.seg button.on i{border-color:var(--acx);color:var(--acx)}
+@media(min-width:720px){.seg{margin-left:auto;margin-right:auto}}
+.fwrap{padding:14px 14px 130px;max-width:720px;margin:0 auto}
+.sec{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:14px}
+.sec>h2{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--mu);font-weight:600}
+.group{margin-bottom:12px}.group:last-child{margin-bottom:0}
+.group>label,.lbl{display:block;font-size:14px;color:var(--mu);margin-bottom:5px}
+.group>label small{opacity:.7}
+input[type=text],input[type=number],input[type=url],input[type=password],input[type=date],select{width:100%;height:46px;padding:0 12px;border-radius:12px;border:1px solid var(--bd);background:var(--sur2);color:var(--tx);font-size:16px;outline:none;appearance:none;-webkit-appearance:none;font-family:inherit}
+input[type=date]{color-scheme:dark}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--mu) 50%),linear-gradient(135deg,var(--mu) 50%,transparent 50%);background-position:calc(100% - 20px) 20px,calc(100% - 15px) 20px;background-size:5px 5px;background-repeat:no-repeat;padding-right:34px}
+input:focus,select:focus{border-color:var(--ac)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sw{position:relative;flex:1;min-width:0}
+.sug{position:absolute;left:0;right:0;top:50px;z-index:15;background:var(--sur2);border:1px solid var(--ac);border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.sug button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;border-bottom:1px solid var(--bd);background:transparent;color:var(--tx);font-size:15px;cursor:pointer}
+.sug button:last-child{border-bottom:0}
+.sug button b{color:var(--ac);font-weight:600}
+.mrow{margin-bottom:6px}
+.mrow .line{display:flex;gap:8px}
+.op{display:block;margin:2px auto 6px;min-width:64px;height:28px;border-radius:14px;border:1px solid var(--ac);background:transparent;color:var(--ac);font-weight:700;font-size:13px;cursor:pointer}
+.op[data-v=not]{border-color:var(--bad);color:var(--bad)}
+.x{width:46px;flex:none;height:46px;border-radius:12px;border:1px solid var(--bd);background:var(--sur2);color:var(--mu);font-size:20px;cursor:pointer}
+.add{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 6px;border-radius:18px;border:1px dashed var(--bd);background:transparent;color:var(--tx);font-size:14px;cursor:pointer;margin-top:2px}
+.add b{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ac);color:var(--acx);font-size:18px;line-height:1}
+.morebtn{width:100%;height:46px;border-radius:12px;border:1px solid var(--bd);background:var(--sur);color:var(--tx);font-size:15px;font-weight:600;cursor:pointer;margin-bottom:14px}
+.morebtn b{color:var(--ac)}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:14px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 22%)}
+.bar .in{display:flex;gap:10px;width:100%;max-width:720px;margin:0 auto}
+button.primary,button.ghost{height:52px;border-radius:14px;font-size:17px;font-weight:700;cursor:pointer;border:0}
+button.primary{flex:1;background:var(--ac);color:var(--acx);box-shadow:0 6px 20px rgba(242,180,11,.25)}
+button.ghost{padding:0 18px;background:var(--sur);color:var(--tx);border:1px solid var(--bd);font-weight:600}
+button.dice{width:56px;padding:0;font-size:24px}
+.sortbar{display:flex;gap:8px;padding:10px 14px;align-items:center;border-bottom:1px solid var(--bd);background:var(--bg)}
+.sortbar select{height:40px;flex:1}
+#rescount{font-size:15px;font-weight:600;color:var(--tx);white-space:nowrap;margin:0}
+#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 10px;padding:14px 10px calc(40px + env(safe-area-inset-bottom))}
+@media(min-width:560px){#grid{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:900px){#grid{grid-template-columns:repeat(6,1fr);max-width:1100px;margin:0 auto}}
+.card{display:block;color:inherit;min-width:0;cursor:pointer;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
+.pw{position:relative;aspect-ratio:2/3;border-radius:10px;overflow:hidden;background:var(--sur2);box-shadow:0 4px 14px rgba(0,0,0,.4);transition:transform .12s}
+.pw img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.pw.noimg{display:grid;place-items:center;padding:8px;text-align:center;font-size:13px;color:var(--mu)}
+.bdg{position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;display:none;place-items:center;color:#fff;font-size:15px;font-weight:800;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.55)}
+.bdg.yes{display:grid;background:var(--ok)}.bdg.prog{display:grid;background:var(--wip)}
+.kb{position:absolute;left:5px;top:5px;padding:2px 6px;border-radius:6px;background:rgba(14,16,20,.82);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:10px;font-weight:800;letter-spacing:.5px;line-height:1.3}
+.kb.mini{background:rgba(242,180,11,.92);color:var(--acx);border-color:transparent}
+.card .t{margin-top:6px;font-size:13px;line-height:1.25;text-align:center;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;word-break:break-word}
+.card:active .pw{transform:scale(.97)}
+.empty{text-align:center;color:var(--mu);padding:60px 20px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom));background:var(--sur2);border:1px solid var(--bd);padding:10px 16px;border-radius:22px;font-size:14px;z-index:90;opacity:0;pointer-events:none;transition:opacity .25s;max-width:92vw;text-align:center}
+body[data-v=f] #toast{bottom:calc(96px + env(safe-area-inset-bottom))}
+#toast.on{opacity:1}
+#loading{position:fixed;inset:0;z-index:80;background:rgba(14,16,20,.88);display:grid;place-items:center;text-align:center;color:var(--mu)}
+.spin{width:38px;height:38px;border-radius:50%;border:4px solid var(--bd);border-top-color:var(--ac);animation:sp 1s linear infinite;margin:0 auto 12px}
+@keyframes sp{to{transform:rotate(360deg)}}
+dialog{width:min(92vw,520px);border:1px solid var(--bd);border-radius:18px;background:var(--sur);color:var(--tx);padding:18px;max-height:90vh;overflow:auto}
+dialog::backdrop{background:rgba(0,0,0,.65)}
+dialog h2{margin:0 0 12px;font-size:18px}
+dialog.sheet{margin:auto auto 0;width:100%;max-width:560px;border-radius:20px 20px 0 0;border-bottom:0;padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+dialog .row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+dialog .row button,.mbtn{flex:1;min-width:120px;height:46px;border-radius:12px;border:1px solid var(--bd);background:var(--sur2);color:var(--tx);font-size:15px;cursor:pointer}
+dialog .row button.primary{background:var(--ac);color:var(--acx);border:0;font-weight:700;box-shadow:none;height:46px;font-size:15px}
+.mbtn{display:flex;align-items:center;gap:12px;width:100%;padding:0 14px;margin-top:8px;text-align:left;font-size:16px}
+.mbtn i{font-style:normal;font-size:20px;width:26px;text-align:center}
+.mtitle{font-size:16px;font-weight:700;margin:0 0 4px}
+.msub{color:var(--mu);font-size:13px;margin:0 0 6px}
+.hint{font-size:13px;color:var(--mu);margin:4px 0 0}
+details{margin-top:12px;font-size:13px;color:var(--mu)}
+pre{white-space:pre-wrap;font-size:12px;background:var(--sur2);padding:10px;border-radius:10px;max-height:220px;overflow:auto}
+/* podrobnosti (cela stran) */
+.dtop{display:flex;gap:14px;padding:16px 14px 8px;background:linear-gradient(var(--sur2),var(--bg));max-width:720px;margin:0 auto}
+.dpost{width:36%;max-width:190px;flex:none;aspect-ratio:2/3;border-radius:12px;background:var(--bd);overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+.dpost img{width:100%;height:100%;object-fit:cover;display:block}
+.dinfo{min-width:0}
+.dinfo h2{font-size:22px;line-height:1.2;margin:0 0 4px;word-break:break-word}
+.dinfo .orig{color:var(--mu);font-size:14px;margin-bottom:6px;word-break:break-word}
+.dinfo .meta{color:var(--mu);font-size:14px;margin-top:2px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.sc{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 11px;border-radius:999px;font-weight:800;font-size:14px;text-decoration:none;color:#fff;background:var(--sur2);border:1px solid var(--bd)}
+.sc small{font-weight:700;font-size:11px;opacity:.85;letter-spacing:.3px}
+.sc.imdb{background:var(--ac);color:var(--acx);border-color:transparent}
+.sc.rt{background:#c0392b;border-color:transparent}.sc.rt.rot{background:#4f8a3c}
+.sc.meta.g{background:#2e8b57;border-color:transparent}.sc.meta.y{background:#b8860b;border-color:transparent}.sc.meta.r{background:#a93226;border-color:transparent}
+.dbody{padding:6px 14px calc(30px + env(safe-area-inset-bottom));max-width:720px;margin:0 auto}
+.dsec{margin-top:18px}
+.dsec>h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--mu);font-weight:700}
+.dsec p{margin:0;font-size:15px;line-height:1.5}
+.kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:14px}
+.kv dt{color:var(--mu)}.kv dd{margin:0;word-break:break-word}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:5px 11px;border-radius:999px;background:var(--sur2);border:1px solid var(--bd);font-size:13px;color:var(--tx)}
+.chip.g{border-color:var(--ac);color:var(--ac)}
+button.chip.lnk{cursor:pointer;font-family:inherit;font-size:14px;padding:6px 12px}
+button.chip.lnk:active{background:var(--ac);color:var(--acx)}
+.xbtn{display:flex;align-items:center;justify-content:space-between;width:100%;height:46px;border-radius:12px;border:1px solid var(--bd);background:var(--sur);color:var(--tx);font-size:15px;font-weight:600;padding:0 14px;margin-top:18px;cursor:pointer}
+.xbtn span{color:var(--mu);transition:transform .15s}
+.xbtn.open span{transform:rotate(180deg)}
+.xbody{padding:12px 2px 0}
+.faces{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:12px 8px;margin-top:10px}
+.face{background:none;border:0;color:var(--tx);cursor:pointer;text-align:center;font-size:12px;line-height:1.2;padding:0}
+.face .im{width:68px;height:68px;border-radius:50%;margin:0 auto 5px;background:var(--sur2);border:1px solid var(--bd);overflow:hidden;display:grid;place-items:center;color:var(--mu);font-size:22px;font-weight:700}
+.face .im img{width:100%;height:100%;object-fit:cover;display:block}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.links a{flex:1;min-width:140px;display:block;text-align:center;padding:12px;border-radius:12px;border:1px solid var(--bd);background:var(--sur);color:var(--tx);text-decoration:none;font-size:15px;font-weight:600}
+/* naključni predlog */
+.rnd{display:flex;gap:14px;margin-bottom:6px}
+.rnd .dpost{width:38%}
+.rnd .txt{min-width:0}
+.rnd h2{font-size:19px;margin:0 0 4px}
+.rnd .syn{font-size:13px;color:var(--mu);display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;margin-top:8px}
+
+:root{--bg:#0c1214;--sur:#151d20;--sur2:#1d282c;--bd:#283539;--ac:#2cc4ae;--acx:#00201b}
+header.top{background:rgba(12,18,20,.94)}
+button.primary{box-shadow:0 6px 20px rgba(44,196,174,.25)}
+#loading{background:rgba(12,18,20,.88)}
+.seg{max-width:692px}.seg button{font-size:15px}
+.qwrap{padding:12px 14px 0;max-width:720px;margin:0 auto}
+.qwrap .group{margin-bottom:6px}
+.row2{display:flex;gap:8px;margin:8px 0}.row2 .morebtn{margin:0;flex:1;height:42px}
+button.sm{height:42px;font-size:14px;padding:0 14px;border-radius:12px;border:1px solid var(--bd);background:var(--sur);color:var(--tx);cursor:pointer}
+.crumb{display:flex;align-items:center;gap:10px;margin-bottom:10px}.crumb b{font-size:17px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#filters{margin-top:0}
+#grid.mags{grid-template-columns:repeat(2,1fr)}
+@media(min-width:560px){#grid.mags{grid-template-columns:repeat(3,1fr)}}
+.card .s{font-size:12px;color:var(--mu);text-align:center;margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.card .t{-webkit-line-clamp:2}
+.kb{background:var(--ac);color:var(--acx);border:0;font-size:12px}
+.pw.noimg{background:linear-gradient(160deg,#1d3a3a,#142428);color:#bfe9e2;font-weight:600;font-size:13px;word-break:break-word}
+body.nodet{overflow:hidden}
+#det{position:fixed;inset:0;z-index:50;background:var(--bg);overflow-y:auto}
+.dtop{position:sticky;top:0;display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:rgba(12,18,20,.95);border-bottom:1px solid var(--bd)}
+.dtop b{font-size:17px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dwrap{max-width:720px;margin:0 auto;padding:16px 16px calc(40px + env(safe-area-inset-bottom))}
+.dpic{width:min(60vw,240px);aspect-ratio:2/3;margin:0 auto 16px;border-radius:12px;overflow:hidden;background:var(--sur2);box-shadow:0 8px 28px rgba(0,0,0,.5)}
+.dpic img{width:100%;height:100%;object-fit:cover;display:block}
+.dpic.noimg{background:linear-gradient(160deg,#1d3a3a,#142428)}
+.dbody h2{margin:0 0 6px;font-size:22px;line-height:1.25}
+.auth,.ser{font-size:16px;color:var(--mu);margin-bottom:4px}
+.lnk{background:none;border:0;padding:0;font:inherit;color:var(--ac);cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-align:left}
+.rd{display:inline-block;margin:8px 0 4px;padding:4px 12px;border-radius:14px;font-size:14px;font-weight:700;border:1px solid var(--bd)}
+.rd-y{color:#7ee8c8;border-color:#2b6f60}.rd-w{color:#ffcf70;border-color:#7a5a1a}.rd-n{color:var(--ac);border-color:var(--ac)}
+a.drive{display:block;text-align:center;margin:12px 0;height:50px;line-height:50px;border-radius:14px;background:var(--ac);color:var(--acx);font-weight:700;font-size:17px;text-decoration:none}
+.nodrive{margin:10px 0;color:var(--mu);font-size:13px}
+.kvs{margin:10px 0}.kv{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px solid var(--bd);font-size:15px}
+.kv span{color:var(--mu);flex:none}.kv b{font-weight:600;text-align:right;min-width:0;word-break:break-word}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.chip{border:1px solid var(--bd);background:var(--sur);color:var(--tx);border-radius:14px;padding:4px 11px;font-size:13px;cursor:pointer}
+.desc{white-space:pre-wrap;font-size:15px;line-height:1.5;margin-top:12px;color:#d5dedf}
+</style>
+</head>
+<body>
+<div id="loading"><div><div class="spin"></div>Nalagam knjižnico …</div></div>
+<header class="top">
+  <h1>Knjižnica <span id="hsub"></span></h1>
+  <button class="icon-btn" id="b-refresh" title="Osveži">⟳</button>
+  <button class="icon-btn" id="b-settings" title="Nastavitve">⚙</button>
+</header>
+<nav class="seg" id="tabs">
+  <button data-t="SLO">Slovenske</button><button data-t="ENG">English</button><button data-t="REVIJE">Revije</button>
+</nav>
+<main id="main">
+  <div class="qwrap">
+    <div id="crumb" class="crumb hidden"><button class="ghost sm" id="b-back">← Vse revije</button><b id="crumb-t"></b></div>
+    <div id="qbox"></div>
+    <div class="row2">
+      <button class="morebtn" id="b-more">Filtri <b id="more-n"></b> ▾</button>
+      <button class="ghost sm" id="b-clear">Počisti</button>
+    </div>
+    <div id="filters" class="sec hidden"></div>
+  </div>
+  <div class="sortbar"><span id="rescount"></span><select id="sort"></select></div>
+  <div id="grid"></div>
+  <div id="sentinel" style="height:40px"></div>
+</main>
+
+<section id="det" class="hidden"></section>
+
+<dialog id="dlg">
+  <h2>Nastavitve</h2>
+  <div class="group"><label class="lbl" for="u1">Povezava do skripte (Web app URL)</label>
+    <input type="url" id="u1" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></div>
+  <div class="group"><label class="lbl" for="u2">Ključ (geslo, ki si ga nastavil v skripti)</label>
+    <input type="password" id="u2" autocomplete="off"></div>
+  <div class="row">
+    <button id="d-test">Preizkusi povezavo</button>
+    <button id="d-share">Kopiraj povezavo za drug telefon</button>
+    <button id="d-cache">Počisti shranjeni seznam</button>
+  </div>
+  <div class="row"><button id="d-cancel">Zapri</button><button class="primary" id="d-save">Shrani</button></div>
+</dialog>
+<div id="toast"></div>
+
+<script>
+'use strict';
+/* ================= pomožne funkcije ================= */
+const $ = s => document.querySelector(s);
+const el = (tag, props = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) e.append(c);
+  return e;
+};
+/* Iskanje: brez naglasov; črke č ć š ž đ ostanejo posebej (za natančno iskanje, če jih vpišeš). */
+const SLC = { 'č': '', 'ć': '', 'š': '', 'ž': '', 'đ': '' };
+const SLB = { '': 'c', '': 'c', '': 's', '': 'z', '': 'd' };
+const nd = s => String(s == null ? '' : s).toLowerCase().replace(/[čćšžđ]/g, c => SLC[c])
+  .replace(/ø/g, 'o').replace(/æ/g, 'ae').replace(/œ/g, 'oe').replace(/ß/g, 'ss').replace(/ł/g, 'l')
+  .normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9-]+/g, ' ').trim();
+const norm = s => nd(s).replace(/[-]/g, c => SLB[c]);
+const coll = new Intl.Collator('sl', { sensitivity: 'base', numeric: true });
+const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
+const num = v => { const m = String(v == null ? '' : v).replace(',', '.').match(/-?\d+(\.\d+)?/); return m ? parseFloat(m[0]) : NaN; };
+const isoToday = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+const fmtDate = s => { const m = String(s || '').match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? (+m[3]) + '. ' + (+m[2]) + '. ' + m[1] : (s || ''); };
+let toastT;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 6000); }
+document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if (e.target === d) d.close(); }));
+const loading = on => $('#loading').classList.toggle('hidden', !on);
+const lsGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
+
+
+const LISTS = ['SLO', 'ENG', 'REVIJE'];
+const HDR = { id: 'id', a: 'Avtor', t: 'Naslov', ser: 'Serija', sn: 'Št. serije', pub: 'Založnik', lang: 'Jezik', isbn: 'ISBN', tags: 'Oznake',
+  shelf: 'Polica', pages: 'Strani', fmt: 'Format', size: 'Velikost', date: 'Datum', issue: 'Številka', desc: 'Opis', cv: 'Naslovnica',
+  drive: 'Drive ID', read: 'Branje', added: 'Dodano' };
+const PAGE = 60;
+
+/* ================= nastavitve + predpomnilnik + API ================= */
+const CFG_KEY = 'knjiznica.cfg';
+const getCfg = () => { try { return JSON.parse(localStorage.getItem(CFG_KEY)) || {}; } catch { return {}; } };
+const setCfg = c => { try { localStorage.setItem(CFG_KEY, JSON.stringify(c)); } catch {} };
+(function readParams() {
+  const p = new URLSearchParams(location.search);
+  if (p.has('u')) { setCfg({ u: p.get('u') || '', k: p.get('k') || '' }); history.replaceState(null, '', location.pathname); }
+})();
+const idb = () => new Promise((res, rej) => { const r = indexedDB.open('knjiznica', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+async function idbGet(k) { try { const d = await idb(); return await new Promise(res => { const q = d.transaction('kv').objectStore('kv').get(k); q.onsuccess = () => res(q.result); q.onerror = () => res(undefined); }); } catch { return undefined; } }
+async function idbSet(k, v) { try { const d = await idb(); await new Promise(res => { const t = d.transaction('kv', 'readwrite'); t.objectStore('kv').put(v, k); t.oncomplete = res; t.onerror = res; }); } catch {} }
+async function idbClear() { try { const d = await idb(); await new Promise(res => { const t = d.transaction('kv', 'readwrite'); t.objectStore('kv').clear(); t.oncomplete = res; t.onerror = res; }); } catch {} }
+async function api(action, extra) {
+  const c = getCfg(); if (!c.u) throw new Error('Povezava do skripte ni nastavljena');
+  const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 120000);
+  try {
+    const r = await fetch(c.u, { method: 'POST', body: JSON.stringify(Object.assign({ key: c.k || '', action }, extra || {})), redirect: 'follow', signal: ctl.signal });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const t = await r.text(); let j;
+    try { j = JSON.parse(t); } catch { throw new Error('Skripta ni vrnila podatkov (pri objavi mora biti dostop »Kdor koli«)'); }
+    if (!j.ok) throw new Error(j.error || 'Napaka skripte');
+    return j;
+  } catch (e) { throw e.name === 'AbortError' ? new Error('Časovna omejitev') : e; }
+  finally { clearTimeout(to); }
+}
+
+/* ================= podatki ================= */
+const DATA = { SLO: [], ENG: [], REVIJE: [] };
+let TAB = LISTS.includes(lsGet('knjiznica.tab')) ? lsGet('knjiznica.tab') : 'SLO';
+let MSEL = null;                 // izbrana revija
+let CURLIST = [], SHOWN = 0;
+
+function ingest(p) {
+  const ix = {}; p.headers.forEach((h, i) => ix[h] = i);
+  for (const l of LISTS) {
+    DATA[l] = (p.lists[l] || []).map(r => {
+      const o = { list: l, _n: {}, _d: {} };
+      for (const k in HDR) { const v = r[ix[HDR[k]]]; o[k] = v == null ? '' : v; }
+      o.id = +o.id; o.pages = o.pages === '' ? NaN : +o.pages; o.size = +o.size || 0; o.snum = o.sn === '' ? NaN : +o.sn;
+      o.a = String(o.a); o.t = String(o.t); o.read = String(o.read || ''); o.date = String(o.date || ''); o.isbn = String(o.isbn || '');
+      return o;
+    });
+  }
+  build(); render();
+}
+const idx = (r, f, useD) => { const c = useD ? r._d : r._n; if (c[f] === undefined) c[f] = (useD ? nd : norm)(r[f] || ''); return c[f]; };
+function mkTerm(q) {
+  const raw = String(q || '').toLowerCase().trim(); if (!raw) return null;
+  const useD = /[čćšžđ]/.test(raw), fn = useD ? nd : norm;
+  const parts = raw.split('*').map(fn); if (!parts.some(Boolean)) return null;
+  if (parts.length === 1) return { useD, sub: parts[0], rx: null };
+  return { useD, sub: null, rx: new RegExp(parts.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('.*')) };
+}
+const hitF = (t, r, fields) => fields.some(f => { const h = idx(r, f, t.useD); return t.rx ? t.rx.test(h) : h.includes(t.sub); });
+const MFIELDS = { q: ['t', 'a', 'ser'], a: ['a'], tags: ['tags'], desc: ['desc'], t: ['t'] };
+
+/* ================= filtri (obrazec) ================= */
+const FILT = $('#filters');
+let MOREOPEN = false;
+function inputRow(f, ph, type) { return el('div', { class: 'group' }, el('label', { text: ph.label }), el('input', { type: type || 'text', 'data-f': f, placeholder: ph.ph || '', autocomplete: 'off', inputmode: type === 'number' ? 'numeric' : null })); }
+const OPS = ['and', 'or', 'not'], OPL = { and: 'IN', or: 'ALI', not: 'BREZ' };
+function multiGroup(key, label, ph, always) {
+  const w = el('div', { class: 'group', 'data-multi': key });
+  if (label) w.append(el('label', { text: label }));
+  const rows = el('div'); w.append(rows);
+  const add = (first) => {
+    const row = el('div', { class: 'mrow', 'data-op': 'and' });
+    if (!first) {
+      const op = el('button', { class: 'op', type: 'button', 'data-v': 'and', text: 'IN' });
+      op.onclick = () => { const n = OPS[(OPS.indexOf(row.dataset.op) + 1) % 3]; row.dataset.op = n; op.dataset.v = n; op.textContent = OPL[n]; schedule(); };
+      row.append(op);
+    }
+    const line = el('div', { class: 'line' });
+    const inp = el('input', { type: 'text', placeholder: ph || '', autocomplete: 'off' }); inp.addEventListener('input', schedule);
+    line.append(inp);
+    if (!first) line.append(el('button', { class: 'x', type: 'button', text: '×', onclick: () => { row.remove(); schedule(); } }));
+    row.append(line); rows.append(row); return inp;
+  };
+  add(true);
+  w.append(el('button', { class: 'add', type: 'button', onclick: () => add(false).focus() }, el('b', { text: '+' }), 'Dodaj pogoj'));
+  w._add = add; w._rows = rows;
+  return w;
+}
+function selGroup(f, label, opts) {
+  const s = el('select', { 'data-f': f }, el('option', { value: '', text: 'Vse' }), ...opts.map(o => el('option', { value: o[0], text: o[1] })));
+  s.addEventListener('change', schedule);
+  return el('div', { class: 'group' }, el('label', { text: label }), s);
+}
+const uniq = (arr, split) => { const m = new Map(); arr.forEach(v => (split ? String(v).split(split) : [v]).forEach(x => { x = String(x).trim(); if (x) m.set(x, (m.get(x) || 0) + 1); })); return [...m.entries()].sort((a, b) => coll.compare(a[0], b[0])); };
+
+function buildFilters() {
+  FILT.innerHTML = '';
+  if (TAB === 'REVIJE') {
+    const yrs = [...new Set(DATA.REVIJE.filter(r => !MSEL || r.a === MSEL).map(r => String(r.date).slice(0, 4)).filter(Boolean))].sort().reverse();
+    FILT.append(selGroup('year', 'Leto', yrs.map(y => [y, y])), multiGroup('tags', 'Oznake', 'npr. znanost'), multiGroup('desc', 'Opis', 'besedilo v opisu'));
+  } else {
+    const d = DATA[TAB];
+    FILT.append(
+      multiGroup('a', 'Avtor', 'npr. king ali ki*g'), multiGroup('t', 'Naslov', 'del naslova'),
+      inputRow('ser', { label: 'Serija' }), inputRow('pub', { label: 'Založnik' }),
+      multiGroup('tags', 'Oznake', 'npr. fantasy'),
+      selGroup('read', 'Branje', [['Prebrano', 'Prebrano'], ['Berem', 'Berem'], ['Za branje', 'Za branje'], ['__none', 'Neprebrano']]),
+      selGroup('fmt', 'Format', uniq(d.map(r => r.fmt), ',').map(x => [x[0], x[0] + ' (' + x[1] + ')'])),
+      selGroup('shelf', 'Polica', uniq(d.map(r => r.shelf), ',').map(x => [x[0], x[0] + ' (' + x[1] + ')'])),
+      el('div', { class: 'two' }, inputRow('p1', { label: 'Strani od' }, 'number'), inputRow('p2', { label: 'Strani do' }, 'number')),
+      multiGroup('desc', 'Opis', 'besedilo v opisu'), inputRow('isbn', { label: 'ISBN' }));
+  }
+  FILT.querySelectorAll('input[data-f]').forEach(i => i.addEventListener('input', schedule));
+}
+function readFilters() {
+  const g = f => { const e = FILT.querySelector('[data-f="' + f + '"]'); return e ? e.value.trim() : ''; };
+  const f = { q: [], multi: {}, ser: mkTerm(g('ser')), pub: mkTerm(g('pub')), isbn: g('isbn').replace(/[-\s]/g, ''), read: g('read'), fmt: g('fmt'), shelf: g('shelf'), year: g('year'),
+    p1: g('p1') === '' ? null : +g('p1'), p2: g('p2') === '' ? null : +g('p2') };
+  const rd = w => { const t = []; w.querySelectorAll('.mrow').forEach(row => { const x = mkTerm(row.querySelector('input').value); if (x) t.push({ t: x, op: row.dataset.op }); }); return t; };
+  const qw = $('#qbox [data-multi]'); if (qw) f.multi.q = rd(qw);
+  FILT.querySelectorAll('[data-multi]').forEach(w => { const t = rd(w); if (t.length) f.multi[w.dataset.multi] = t; });
+  return f;
+}
+function matchMulti(terms, r, fields) {
+  let res = null;
+  for (const { t, op } of terms) { if (op === 'not') continue; const h = hitF(t, r, fields); res = res === null ? h : (op === 'or' ? (res || h) : (res && h)); }
+  if (res === false) return false;
+  for (const { t, op } of terms) if (op === 'not' && hitF(t, r, fields)) return false;
+  return true;
+}
+function match(r, f) {
+  for (const k in f.multi) if (!matchMulti(f.multi[k], r, MFIELDS[k])) return false;
+  if (f.ser && !hitF(f.ser, r, ['ser'])) return false;
+  if (f.pub && !hitF(f.pub, r, ['pub'])) return false;
+  if (f.isbn && !r.isbn.replace(/[-\s]/g, '').includes(f.isbn)) return false;
+  if (f.read) { if (f.read === '__none') { if (r.read) return false; } else if (r.read !== f.read) return false; }
+  if (f.fmt && !String(r.fmt).split(',').map(s => s.trim()).includes(f.fmt)) return false;
+  if (f.shelf && !String(r.shelf).split(',').map(s => s.trim()).includes(f.shelf)) return false;
+  if (f.year && String(r.date).slice(0, 4) !== f.year) return false;
+  if (f.p1 != null && !(r.pages >= f.p1)) return false;
+  if (f.p2 != null && !(r.pages <= f.p2)) return false;
+  return true;
+}
+function activeCount() { const f = readFilters(); let n = 0; for (const k of ['ser', 'pub']) if (f[k]) n++; for (const k in f.multi) if (k !== 'q') n++; for (const k of ['isbn', 'read', 'fmt', 'shelf', 'year']) if (f[k]) n++; if (f.p1 != null || f.p2 != null) n++; return n; }
+
+/* ================= razvrščanje + prikaz ================= */
+const SORTS = {
+  books: [['t', 'Naslov A–Ž'], ['a', 'Avtor A–Ž'], ['ser', 'Serija'], ['added', 'Nazadnje dodano'], ['pages', 'Strani (največ)'], ['size', 'Velikost (največ)']],
+  issues: [['dnew', 'Datum (novejše)'], ['dold', 'Datum (starejše)']],
+  mags: [['mname', 'Ime A–Ž'], ['mcount', 'Število številk']]
+};
+function sortMode() { return MSEL ? 'issues' : TAB === 'REVIJE' ? 'mags' : 'books'; }
+function setSortUI() {
+  const m = sortMode(), s = $('#sort'); const keep = s.dataset.m === m ? s.value : '';
+  s.innerHTML = ''; SORTS[m].forEach(o => s.append(el('option', { value: o[0], text: o[1] }))); s.dataset.m = m; if (keep) s.value = keep;
+}
+function applySort(a) {
+  const k = $('#sort').value;
+  const cmpT = (x, y) => coll.compare(x.t, y.t);
+  if (k === 'a') a.sort((x, y) => coll.compare(x.a, y.a) || coll.compare(x.ser, y.ser) || (x.snum || 0) - (y.snum || 0) || cmpT(x, y));
+  else if (k === 'ser') a.sort((x, y) => (!x.ser - !y.ser) || coll.compare(x.ser, y.ser) || (x.snum || 0) - (y.snum || 0) || cmpT(x, y));
+  else if (k === 'added') a.sort((x, y) => String(y.added).localeCompare(String(x.added)) || y.id - x.id);
+  else if (k === 'pages') a.sort((x, y) => (y.pages || 0) - (x.pages || 0));
+  else if (k === 'size') a.sort((x, y) => y.size - x.size);
+  else if (k === 'dnew') a.sort((x, y) => String(y.date).localeCompare(String(x.date)) || y.id - x.id);
+  else if (k === 'dold') a.sort((x, y) => String(x.date).localeCompare(String(y.date)) || x.id - y.id);
+  else a.sort(cmpT);
+  return a;
+}
+const MON = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'avg', 'sep', 'okt', 'nov', 'dec'];
+const dateLabel = d => { const m = String(d).match(/^(\d{4})-(\d{2})/); return m ? MON[+m[2] - 1] + ' ' + m[1] : String(d || ''); };
+const coverUrl = r => r.cv ? 'covers/' + r.list.toLowerCase() + '/' + r.id + '.jpg?v=' + encodeURIComponent(r.cv) : '';
+
+function cardBook(r) {
+  const pw = el('div', { class: 'pw' });
+  const u = coverUrl(r);
+  if (u) { const im = el('img', { src: u, alt: '', loading: 'lazy', decoding: 'async' }); im.onerror = () => { im.remove(); pw.classList.add('noimg'); pw.textContent = r.t; }; pw.append(im); }
+  else { pw.classList.add('noimg'); pw.textContent = r.t; }
+  const sub = r.list === 'REVIJE' ? dateLabel(r.date) + (r.issue ? ' · št. ' + r.issue : '') : r.a;
+  const c = el('div', { class: 'card', onclick: () => openDet(r) }, pw, el('div', { class: 't', text: r.list === 'REVIJE' ? sub : r.t }), r.list === 'REVIJE' ? null : el('div', { class: 's', text: sub }));
+  return c;
+}
+function cardMag(m) {
+  const pw = el('div', { class: 'pw' });
+  const u = coverUrl(m.cover);
+  if (u) { const im = el('img', { src: u, alt: '', loading: 'lazy', decoding: 'async' }); im.onerror = () => { im.remove(); pw.classList.add('noimg'); pw.textContent = m.name; }; pw.append(im); }
+  else { pw.classList.add('noimg'); pw.textContent = m.name; }
+  pw.append(el('span', { class: 'kb', text: m.count }));
+  return el('div', { class: 'card', onclick: () => { MSEL = m.name; build(); render(); window.scrollTo(0, 0); } }, pw, el('div', { class: 't', text: m.name }));
+}
+function magazines() {
+  const g = new Map();
+  DATA.REVIJE.forEach(r => { const k = r.a || '(brez imena)'; let m = g.get(k); if (!m) g.set(k, m = { name: k, count: 0, cover: null, d: '' }); m.count++; if (r.cv && String(r.date) >= m.d) { m.d = String(r.date); m.cover = r; } });
+  return [...g.values()];
+}
+let drawn = 0;
+function render() {
+  setSortUI();
+  const f = readFilters();
+  $('#crumb').classList.toggle('hidden', !MSEL); $('#crumb-t').textContent = MSEL || '';
+  $('#more-n').textContent = activeCount() ? '(' + activeCount() + ')' : '';
+  const grid = $('#grid'); grid.innerHTML = ''; drawn = 0;
+  if (TAB === 'REVIJE' && !MSEL) {
+    let ms = magazines(); if (f.multi.q) ms = ms.filter(m => matchMulti(f.multi.q, { _n: {}, _d: {}, a: m.name }, ['a']));
+    const k = $('#sort').value; ms.sort(k === 'mcount' ? (x, y) => y.count - x.count : (x, y) => coll.compare(x.name, y.name));
+    CURLIST = ms; $('#rescount').textContent = ms.length + ' revij · ' + DATA.REVIJE.length + ' številk';
+    grid.className = 'mags';
+  } else {
+    let a = DATA[TAB].filter(r => (!MSEL || r.a === MSEL) && match(r, f));
+    // številke: iskanje po datumu/številki
+    CURLIST = applySort(a);
+    $('#rescount').textContent = a.length + (TAB === 'REVIJE' ? ' številk' : ' knjig');
+    grid.className = '';
+  }
+  if (!CURLIST.length) grid.append(el('div', { class: 'empty', text: DATA[TAB].length ? 'Ni zadetkov.' : 'Seznam je prazen.' }));
+  more();
+}
+function more() {
+  const g = $('#grid'); const end = Math.min(drawn + PAGE, CURLIST.length);
+  const fr = document.createDocumentFragment();
+  for (let i = drawn; i < end; i++) fr.append(TAB === 'REVIJE' && !MSEL ? cardMag(CURLIST[i]) : cardBook(CURLIST[i]));
+  g.append(fr); drawn = end;
+}
+new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && drawn < CURLIST.length) more(); }, { rootMargin: '600px' }).observe($('#sentinel'));
+const schedule = debounce(render, 200);
+
+/* ================= zavihki + obrazec ================= */
+function qboxBuild() {
+  const q = $('#qbox'); q.innerHTML = '';
+  const w = multiGroup('q', '', TAB === 'REVIJE' && !MSEL ? 'Išči revijo' : 'Išči: naslov, avtor ali serija (* = karkoli)');
+  q.append(w);
+}
+function build() {
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === TAB));
+  $('#hsub').textContent = '';
+  qboxBuild(); buildFilters();
+  const noFilters = TAB === 'REVIJE' && !MSEL; $('#b-more').classList.toggle('hidden', noFilters); $('#b-clear').classList.toggle('hidden', false);
+  if (noFilters) { FILT.classList.add('hidden'); MOREOPEN = false; } else FILT.classList.toggle('hidden', !MOREOPEN);
+}
+function switchTab(t) { TAB = t; MSEL = null; lsSet('knjiznica.tab', t); build(); render(); window.scrollTo(0, 0); }
+document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => switchTab(b.dataset.t));
+$('#b-more').onclick = () => { MOREOPEN = !MOREOPEN; FILT.classList.toggle('hidden', !MOREOPEN); };
+$('#b-clear').onclick = () => { build(); render(); };
+$('#sort').onchange = render;
+$('#b-back').onclick = () => { MSEL = null; build(); render(); };
+
+/* ================= podrobnosti ================= */
+let DETOPEN = false;
+function chip(text, fn) { return el('button', { class: 'chip', type: 'button', text, onclick: fn }); }
+function searchField(key, val) {          // prenese vrednost v filter in zapre podrobnosti
+  closeDet(true);
+  if (TAB === 'REVIJE' && !MSEL) { MSEL = null; }
+  MOREOPEN = true; build();
+  const w = FILT.querySelector('[data-multi="' + key + '"]'); const inp = w && w.querySelector('input');
+  if (inp) { inp.value = val; FILT.classList.remove('hidden'); }
+  else { const i = FILT.querySelector('[data-f="' + key + '"]'); if (i) i.value = val; }
+  render(); window.scrollTo(0, 0);
+}
+function row(k, v) { return v === '' || v == null || (typeof v === 'number' && isNaN(v)) ? null : el('div', { class: 'kv' }, el('span', { text: k }), el('b', {}, ...(Array.isArray(v) ? v : [String(v)]))); }
+function openDet(r) {
+  const d = $('#det'); d.innerHTML = '';
+  const u = coverUrl(r);
+  const top = el('div', { class: 'dtop' },
+    el('button', { class: 'icon-btn', text: '←', onclick: () => closeDet() }), el('b', { text: r.list === 'REVIJE' ? r.a : 'Podrobnosti' }));
+  const pic = el('div', { class: 'dpic' });
+  if (u) { const im = el('img', { src: u, alt: '' }); im.onerror = () => im.remove(); pic.append(im); } else pic.classList.add('noimg');
+  const body = el('div', { class: 'dbody' });
+  body.append(el('h2', { text: r.list === 'REVIJE' ? dateLabel(r.date) + (r.issue ? ' · št. ' + r.issue : '') : r.t }));
+  if (r.list !== 'REVIJE') {
+    const au = r.a.split(' & ').filter(Boolean);
+    body.append(el('div', { class: 'auth' }, ...au.flatMap((a, i) => [i ? ' & ' : null, el('button', { class: 'lnk', type: 'button', text: a, onclick: () => searchField('a', a) })])));
+    if (r.ser) body.append(el('div', { class: 'ser' }, el('button', { class: 'lnk', type: 'button', text: r.ser, onclick: () => searchField('ser', r.ser) }), r.snum >= 0 ? ' · št. ' + r.sn : ''));
+  } else if (r.t && !/^\d{4}-\d{2}/.test(r.t)) body.append(el('div', { class: 'ser', text: r.t }));
+  if (r.read) body.append(el('div', { class: 'rd rd-' + (r.read === 'Prebrano' ? 'y' : r.read === 'Berem' ? 'w' : 'n'), text: r.read }));
+  if (r.drive) body.append(el('a', { class: 'drive', href: 'https://drive.google.com/file/d/' + encodeURIComponent(r.drive) + '/view', target: '_blank', rel: 'noopener', text: 'Odpri na Drive' }));
+  else body.append(el('div', { class: 'nodrive', text: 'Datoteka še ni povezana z Drive' }));
+  const kv = el('div', { class: 'kvs' }, row('Založnik', r.pub), row('Strani', r.pages), row('Format', r.fmt), row('Velikost', r.size ? (r.size / 1048576 >= 1 ? (r.size / 1048576).toFixed(1) + ' MB' : Math.round(r.size / 1024) + ' kB') : ''),
+    row('Jezik', r.lang), row('ISBN', r.isbn), row('Polica', r.shelf), row('Dodano', fmtDate(r.added)));
+  body.append(kv);
+  if (r.tags) body.append(el('div', { class: 'chips' }, ...String(r.tags).split(',').map(x => x.trim()).filter(Boolean).map(x => chip(x, () => searchField('tags', x)))));
+  if (r.desc) body.append(el('div', { class: 'desc', text: r.desc }));
+  d.append(top, el('div', { class: 'dwrap' }, pic, body));
+  d.classList.remove('hidden'); d.scrollTop = 0; document.body.classList.add('nodet');
+  if (!DETOPEN) { history.pushState({ det: 1 }, ''); DETOPEN = true; }
+}
+function closeDet(silent) {
+  if (!DETOPEN) return; DETOPEN = false;
+  $('#det').classList.add('hidden'); document.body.classList.remove('nodet');
+  if (history.state && history.state.det) history.back();
+}
+window.addEventListener('popstate', () => { if (DETOPEN) { DETOPEN = false; $('#det').classList.add('hidden'); document.body.classList.remove('nodet'); } });
+
+/* ================= nalaganje ================= */
+let lastLoad = 0, busy = false;
+async function load(force) {
+  if (busy) return; busy = true;
+  const cfg = getCfg();
+  if (!cfg.u) { busy = false; build(); openSettings(); return; }
+  const cached = await idbGet('data');
+  const haveCache = !!(cached && cached.payload && cached.payload.lists);
+  if (haveCache && !force) { if (!DATA.SLO.length && !DATA.ENG.length && !DATA.REVIJE.length) ingest(cached.payload); } else loading(true);
+  try {
+    const since = haveCache && !force ? cached.version || '' : '';
+    const r = await api('read', since ? { since } : {});
+    if (r.unchanged) { if (force) toast('Knjižnica je že posodobljena'); }
+    else { ingest(r); await idbSet('data', { version: r.version, payload: r }); if (haveCache) toast('Knjižnica posodobljena'); }
+    lastLoad = Date.now();
+  } catch (e) {
+    if (haveCache) toast('Napaka: ' + e.message + ' (prikazana je shranjena knjižnica)');
+    else $('#grid').append(el('div', { class: 'empty', text: 'Knjižnice ni bilo mogoče naložiti (' + e.message + '). Preveri nastavitve (⚙).' }));
+  }
+  loading(false); busy = false;
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && Date.now() - lastLoad > 3 * 60 * 1000 && getCfg().u) load(false); });
+function openSettings() { const c = getCfg(); $('#u1').value = c.u || ''; $('#u2').value = c.k || ''; $('#dlg').showModal(); }
+$('#b-settings').onclick = openSettings;
+$('#d-cancel').onclick = () => $('#dlg').close();
+$('#d-save').onclick = () => { setCfg({ u: $('#u1').value.trim(), k: $('#u2').value }); $('#dlg').close(); load(true); };
+$('#d-test').onclick = async () => { const keep = getCfg(); setCfg({ u: $('#u1').value.trim(), k: $('#u2').value }); try { await api('ping'); toast('Povezava deluje ✓'); } catch (e) { toast('Napaka: ' + e.message); } setCfg(keep); };
+$('#d-share').onclick = async () => {
+  const link = location.origin + location.pathname + '?u=' + encodeURIComponent($('#u1').value.trim()) + '&k=' + encodeURIComponent($('#u2').value);
+  try { await navigator.clipboard.writeText(link); toast('Povezava kopirana – odpri jo na drugem telefonu'); } catch { prompt('Kopiraj povezavo:', link); }
+};
+$('#d-cache').onclick = async () => { await idbClear(); toast('Shranjena knjižnica izbrisana'); };
+$('#b-refresh').onclick = () => load(true);
+
+if (history.state && history.state.det) history.replaceState(null, '', location.pathname);
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+build(); render(); load(false);
+
+</script>
+</body>
+</html>
